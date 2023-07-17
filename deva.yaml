@@ -1,0 +1,21 @@
+---
+- hosts: localhost
+  become: yes
+  tasks:
+          - name: Testing
+            shell: echo '123' | mkpasswd --stdin --method=sha-512
+            register: out
+
+          - name: output display
+            debug: msg="{{out.stdout}}"
+
+          - name: to create user
+            ansible.builtin.user:
+                    name: "{{ item }}"
+                    state: present
+                    shell: /bin/bash
+                    password: "{{ out.stdout }}"
+            loop:
+                    - yy1
+                    - yy2
+                    - yy3    
